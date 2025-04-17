@@ -9,6 +9,7 @@
 #include <Arduino.h>
 #include <esp_err.h>
 #include <driver/i2s.h>
+#include "arduinoFFT.h"
 
 #define SAMPLES 512                 ///< Nombre d'échantillons
 #define SAMPLING_FREQUENCY 44100    ///< Fréquence d'échantillonnage en Hz
@@ -25,9 +26,6 @@ public:
     float niveauSonoreCrete;        ///< Niveau sonore crête détecté
     float vReal[SAMPLES];           ///< Partie réelle des échantillons pour FFT
     float vImag[SAMPLES];           ///< Partie imaginaire des échantillons pour FFT
-    size_t bytesRead;               ///< Nombre d'octets lus via I2S
-    int32_t i2sData[SAMPLES];       ///< Buffer des échantillons I2S bruts
-
     /**
      * @brief Constructeur par défaut
      */
@@ -44,4 +42,11 @@ public:
      * @return esp_err_t Code d'erreur ESP32
      */
     esp_err_t SamplesDmaAcquisition();
+
+private:
+    i2s_config_t i2sConfig;
+    i2s_pin_config_t pinConfig;
+    ArduinoFFT<float> FFT;
+    size_t bytesRead;
+    int32_t i2sData[SAMPLES];
 };

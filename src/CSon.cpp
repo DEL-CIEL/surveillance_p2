@@ -12,6 +12,9 @@ CSon::CSon()
       niveauSonoreCrete(0.0f),
       bytesRead(0) 
 {
+
+    this->tempsEchantillon = (1000*SAMPLES) / SAMPLING_FREQUENCY;
+
     // Initialisation des tableaux
     memset(vReal, 0, sizeof(vReal));
     memset(vImag, 0, sizeof(vImag));
@@ -87,4 +90,4 @@ esp_err_t CSon::SamplesDmaAcquisition()
     } 
 
     return result; 
-} 
+}

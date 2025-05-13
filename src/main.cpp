@@ -3,6 +3,8 @@
 #include "Wire.h"
 #include "CSon.h"
 
+#define PERIODE_RELEVE 10000  // période relevé et envoi en ms
+
 SSD1306 ecranOled(0x3c, 5, 4);
 CSon son;
 
@@ -21,6 +23,9 @@ void setup()
 
 void loop()
 {
+  float niveauSonoreMoy=0; 
+  int periodeReleve = PERIODE_RELEVE/son.tempsEchantillon;
+
   son.SamplesDmaAcquisition();
   Serial.print("nvSonoreMoyen: ");
   Serial.println(son.niveauSonoreMoyen);
@@ -28,4 +33,6 @@ void loop()
   Serial.print("nvSonoreCrete: ");
   Serial.println(son.niveauSonoreCrete);
   sleep(1);
+  Serial.print("Periode de relevé: ");
+  Serial.println(periodeReleve);
 }

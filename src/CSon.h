@@ -26,6 +26,7 @@ public:
     float niveauSonoreCrete;        ///< Niveau sonore crête détecté
     float vReal[SAMPLES];           ///< Partie réelle des échantillons pour FFT
     float vImag[SAMPLES];           ///< Partie imaginaire des échantillons pour FFT
+    float tempsEchantillon;
     /**
      * @brief Constructeur par défaut
      */

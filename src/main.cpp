@@ -26,13 +26,17 @@ void loop()
   float niveauSonoreMoy=0; 
   int periodeReleve = PERIODE_RELEVE/son.tempsEchantillon;
 
+  float niveauSonoreMoyenDB=0; 
+  float niveauSonoreCreteDB=0;
+
+  niveauSonoreMoyenDB = 20 * log10( niveauSonoreMoy )-14.56 ;   
+  niveauSonoreCreteDB = 20 * log10( son.niveauSonoreCrete )-18.474 ;
+
   son.SamplesDmaAcquisition();
-  Serial.print("nvSonoreMoyen: ");
-  Serial.println(son.niveauSonoreMoyen);
+  Serial.print("niveuaSonoreCreteDB: ");
+  Serial.println(niveauSonoreCreteDB);
   sleep(1);
-  Serial.print("nvSonoreCrete: ");
-  Serial.println(son.niveauSonoreCrete);
+  Serial.print("niveauSonoreMoyenDB: ");
+  Serial.println(niveauSonoreMoy);
   sleep(1);
-  Serial.print("Periode de relevé: ");
-  Serial.println(periodeReleve);
 }

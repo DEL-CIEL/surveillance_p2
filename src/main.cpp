@@ -7,6 +7,28 @@
 
 SSD1306 ecranOled(0x3c, 5, 4);
 CSon son;
+int compteurAffichage = 0;
+
+
+void AfficherSpectre(float* vRe) {
+  int largeurBarre = 1;       // Largeur de chaque barre
+  int espacement = 0;         // Espacement entre les barres
+  int hauteurMax = 63;        // Hauteur maximale de l'écran (64 lignes)
+
+  ecranOled.clear();          // Effacer l'écran
+
+  // Affichage du spectre (128 colonnes disponibles sur l'écran)
+  for (int i = 1; i < 128; i++) {
+    double val = vRe[i];
+    int hauteurBarre = map(val, 0, 700000, 0, hauteurMax);
+
+    // Dessiner une barre verticale (à partir du bas de l'écran)
+    ecranOled.fillRect(i * (largeurBarre + espacement), 64 - hauteurBarre, largeurBarre, hauteurBarre);
+  }
+
+  ecranOled.display();  // Mettre à jour l'écran
+}
+
 
 void setup()
 {
@@ -39,4 +61,9 @@ void loop()
   Serial.print("niveauSonoreMoyenDB: ");
   Serial.println(niveauSonoreMoy);
   sleep(1);
+
+  if(compteurAffichage % 2 == 0)
+  {
+    AfficherSpectre(son.vReal);
+  } compteurAffichage++; 
 }

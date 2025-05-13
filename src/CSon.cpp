@@ -60,7 +60,11 @@ esp_err_t CSon::SamplesDmaAcquisition()
     size_t bytesRead; 
 
     // Capture des données audio à partir de l'interface I2S
-    float result = i2s_read(I2S_NUM_0, &this->i2sData, sizeof(this->i2sData), &bytesRead, portMAX_DELAY); 
+    float result = i2s_read(I2S_NUM_0, &this->i2sData, sizeof(this->i2sData), &bytesRead, portMAX_DELAY);
+
+    FFT.windowing(this->vReal, SAMPLES, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+    FFT.compute(this->vReal, this->vImag, SAMPLES, FFT_FORWARD);   
+    FFT.complexToMagnitude(this->vReal, this->vImag, SAMPLES);
 
     if (result == ESP_OK) 
     { 
@@ -74,7 +78,10 @@ esp_err_t CSon::SamplesDmaAcquisition()
             for (int16_t i = 0; i < samplesRead; ++i)  
             { 
                 // Réduction de la précision de l'échantillon (décalage de bits pour ajustement en 16 bits)
-                i2sData[i] = i2sData[i] >> 8;  
+                i2sData[i] = i2sData[i] >> 8; 
+
+                vReal[i] = (double)i2sData[i];  // Partie réelle du signal 
+                vImag[i] = 0.0;  // Partie imaginaire initialisée à zéro 
 
                 // Calcul de la somme des valeurs absolues pour déterminer la moyenne du signal audio
                 mean += abs(i2sData[i]); 
@@ -86,7 +93,7 @@ esp_err_t CSon::SamplesDmaAcquisition()
 
             // Calcul de la moyenne du niveau sonore en fonction des échantillons extraits
             this->niveauSonoreMoyen = mean / samplesRead;  
-        }     
+        }
     } 
 
     return result; 
